@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { useLocation } from 'react-router-dom';
 
 export const Navigation = () => {
   const { user, signIn, signUp, signOut } = useAuth();
@@ -15,6 +16,7 @@ export const Navigation = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,16 +66,20 @@ export const Navigation = () => {
     }
   };
 
+  const navigateTo = (path: string) => {
+    window.location.href = path;
+  };
+
   return (
     <>
       <nav className="bg-white/80 backdrop-blur-md border-b border-amber-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center cursor-pointer" onClick={() => navigateTo('/')}>
                 <span className="text-white font-bold text-sm">FH</span>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent cursor-pointer" onClick={() => navigateTo('/')}>
                 FreshHire
               </span>
               <Badge variant="secondary" className="ml-2 text-xs bg-yellow-100 text-amber-800">
@@ -82,9 +88,24 @@ export const Navigation = () => {
             </div>
             
             <div className="hidden md:flex items-center space-x-6">
-              <a href="#" className="text-amber-700 hover:text-orange-600 transition-colors">Find Jobs</a>
-              <a href="#" className="text-amber-700 hover:text-orange-600 transition-colors">My Applications</a>
-              <a href="#" className="text-amber-700 hover:text-orange-600 transition-colors">Resume Builder</a>
+              <button 
+                onClick={() => navigateTo('/')}
+                className={`transition-colors ${location.pathname === '/' ? 'text-orange-600' : 'text-amber-700 hover:text-orange-600'}`}
+              >
+                Find Jobs
+              </button>
+              <button 
+                onClick={() => navigateTo('/applications')}
+                className={`transition-colors ${location.pathname === '/applications' ? 'text-orange-600' : 'text-amber-700 hover:text-orange-600'}`}
+              >
+                My Applications
+              </button>
+              <button 
+                onClick={() => navigateTo('/resume-builder')}
+                className={`transition-colors ${location.pathname === '/resume-builder' ? 'text-orange-600' : 'text-amber-700 hover:text-orange-600'}`}
+              >
+                Resume Builder
+              </button>
             </div>
             
             <div className="flex items-center space-x-3">
