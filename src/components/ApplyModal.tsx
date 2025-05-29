@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -13,22 +12,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Upload, Mic, MicOff, Send, FileText } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-
-interface Job {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  salary: string;
-  type: string;
-  posted: string;
-  description: string;
-  skills: string[];
-  logo: string;
-  isRemote: boolean;
-  isUrgent: boolean;
-  experienceLevel: string;
-}
+import { useAuth } from '@/contexts/AuthContext';
+import { jobService } from '@/services/jobService';
+import { Job } from '@/lib/supabase';
 
 interface ApplyModalProps {
   job: Job;
@@ -37,15 +23,17 @@ interface ApplyModalProps {
 }
 
 export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) => {
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [isRecording, setIsRecording] = useState(false);
   const [coverLetter, setCoverLetter] = useState('');
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [personalInfo, setPersonalInfo] = useState({
     name: '',
-    email: '',
+    email: user?.email || '',
     phone: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleVoiceInput = () => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -96,7 +84,16 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to apply for jobs.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (!resumeFile) {
       toast({
         title: "Resume required",
@@ -115,13 +112,25 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
       return;
     }
 
-    // Simulate application submission
-    toast({
-      title: "Application submitted!",
-      description: `Your application for ${job.title} at ${job.company} has been submitted successfully.`,
-    });
-    
-    onClose();
+    try {
+      setIsSubmitting(true);
+      await jobService.applyToJob(job.id, resumeFile, coverLetter);
+      
+      toast({
+        title: "Application submitted!",
+        description: `Your application for ${job.title} at ${job.company} has been submitted successfully.`,
+      });
+      
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Application failed",
+        description: error instanceof Error ? error.message : "Failed to submit application",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -339,10 +348,11 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
               ) : (
                 <Button 
                   onClick={handleSubmit}
+                  disabled={isSubmitting}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  Submit Application
+                  {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </Button>
               )}
             </div>

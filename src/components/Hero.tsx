@@ -1,13 +1,54 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Mic, MicOff, Briefcase, Users, TrendingUp } from 'lucide-react';
-import { useState } from 'react';
+import { jobService } from '@/services/jobService';
+import { toast } from '@/hooks/use-toast';
 
-export const Hero = () => {
+interface HeroProps {
+  onSearchResults?: (jobs: any[]) => void;
+}
+
+export const Hero = ({ onSearchResults }: HeroProps) => {
   const [isListening, setIsListening] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      toast({
+        title: "Search required",
+        description: "Please enter a search term",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+      const jobs = await jobService.getJobs({ search: searchQuery });
+      
+      if (onSearchResults) {
+        onSearchResults(jobs);
+      }
+      
+      toast({
+        title: "Search completed",
+        description: `Found ${jobs.length} jobs matching "${searchQuery}"`,
+      });
+      
+      // Scroll to results
+      document.getElementById('job-results')?.scrollIntoView({ behavior: 'smooth' });
+    } catch (error) {
+      toast({
+        title: "Search failed",
+        description: "Unable to search jobs. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   const startVoiceSearch = () => {
     if ('webkitSpeechRecognition' in window) {
@@ -28,6 +69,11 @@ export const Hero = () => {
 
       recognition.onerror = () => {
         setIsListening(false);
+        toast({
+          title: "Voice search error",
+          description: "Unable to access microphone. Please try typing instead.",
+          variant: "destructive",
+        });
       };
 
       recognition.onend = () => {
@@ -36,7 +82,11 @@ export const Hero = () => {
 
       recognition.start();
     } else {
-      alert('Voice search is not supported in your browser');
+      toast({
+        title: "Voice search not supported",
+        description: "Please type your search query instead.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -67,6 +117,7 @@ export const Hero = () => {
                     placeholder="Search jobs, companies, or skills..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                     className="pl-12 pr-16 py-6 text-lg border-0 rounded-l-2xl bg-transparent focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
@@ -76,15 +127,18 @@ export const Hero = () => {
                   variant="ghost"
                   size="lg"
                   className={`px-4 ${isListening ? 'text-orange-600 bg-orange-50' : 'text-amber-600 hover:bg-yellow-50'}`}
+                  disabled={isListening}
                 >
                   {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
                 </Button>
                 
                 <Button 
+                  onClick={handleSearch}
+                  disabled={isSearching}
                   size="lg" 
                   className="rounded-r-2xl px-8 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700"
                 >
-                  Search Jobs
+                  {isSearching ? 'Searching...' : 'Search Jobs'}
                 </Button>
               </div>
             </div>
