@@ -25,20 +25,20 @@ export const JobFilters = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg border border-slate-200 mb-8">
+    <div className="bg-white rounded-2xl p-6 shadow-lg border border-orange-200 mb-8">
       <div className="flex items-center gap-2 mb-6">
-        <Filter className="h-5 w-5 text-slate-600" />
-        <h2 className="text-lg font-semibold text-slate-900">Smart Filters</h2>
+        <Filter className="h-5 w-5 text-amber-600" />
+        <h2 className="text-lg font-semibold text-amber-900">Smart Filters</h2>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+          <label className="text-sm font-medium text-amber-800 flex items-center gap-2">
             <MapPin className="h-4 w-4" />
             Location
           </label>
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="border-orange-300 focus:ring-orange-500">
               <SelectValue placeholder="Select location" />
             </SelectTrigger>
             <SelectContent>
@@ -53,12 +53,12 @@ export const JobFilters = () => {
         </div>
         
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+          <label className="text-sm font-medium text-amber-800 flex items-center gap-2">
             <Building className="h-4 w-4" />
             Industry
           </label>
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="border-orange-300 focus:ring-orange-500">
               <SelectValue placeholder="Select industry" />
             </SelectTrigger>
             <SelectContent>
@@ -73,9 +73,9 @@ export const JobFilters = () => {
         </div>
         
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700">Job Type</label>
+          <label className="text-sm font-medium text-amber-800">Job Type</label>
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="border-orange-300 focus:ring-orange-500">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -88,7 +88,7 @@ export const JobFilters = () => {
         </div>
         
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
+          <label className="text-sm font-medium text-amber-800 flex items-center gap-2">
             <DollarSign className="h-4 w-4" />
             Min Salary: ₹{salaryRange[0].toLocaleString()}
           </label>
@@ -104,7 +104,7 @@ export const JobFilters = () => {
       </div>
       
       <div className="space-y-3">
-        <div className="text-sm font-medium text-slate-700">Quick Filters</div>
+        <div className="text-sm font-medium text-amber-800">Quick Filters</div>
         <div className="flex flex-wrap gap-2">
           {[
             'Remote Work',
@@ -123,8 +123,8 @@ export const JobFilters = () => {
               onClick={() => toggleFilter(filter)}
               className={`rounded-full transition-all ${
                 activeFilters.includes(filter)
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
-                  : 'hover:bg-slate-50'
+                  ? 'bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700'
+                  : 'hover:bg-yellow-50 border-orange-300 text-amber-700'
               }`}
             >
               {filter}
@@ -134,12 +134,12 @@ export const JobFilters = () => {
       </div>
       
       {activeFilters.length > 0 && (
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-orange-200">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-600">{activeFilters.length} filters applied</span>
+            <span className="text-sm text-amber-600">{activeFilters.length} filters applied</span>
             <div className="flex gap-1">
               {activeFilters.map((filter) => (
-                <Badge key={filter} variant="secondary" className="text-xs">
+                <Badge key={filter} variant="secondary" className="text-xs bg-orange-100 text-orange-700">
                   {filter}
                 </Badge>
               ))}
@@ -149,7 +149,7 @@ export const JobFilters = () => {
             variant="ghost"
             size="sm"
             onClick={() => setActiveFilters([])}
-            className="text-slate-600 hover:text-slate-900"
+            className="text-amber-600 hover:text-orange-600 hover:bg-yellow-50"
           >
             Clear All
           </Button>
