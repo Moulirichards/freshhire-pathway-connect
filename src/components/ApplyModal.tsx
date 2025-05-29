@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -138,7 +139,7 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
               {job.logo}
             </div>
             Apply for {job.title}
@@ -151,25 +152,25 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
         <div className="space-y-6">
           {/* Progress Steps */}
           <div className="flex items-center justify-between mb-6">
-            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-orange-600' : 'text-slate-400'}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-200'
+                step >= 1 ? 'bg-orange-600 text-white' : 'bg-slate-200'
               }`}>
                 1
               </div>
               <span className="text-sm">Personal Info</span>
             </div>
-            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-orange-600' : 'text-slate-400'}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                step >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-200'
+                step >= 2 ? 'bg-orange-600 text-white' : 'bg-slate-200'
               }`}>
                 2
               </div>
               <span className="text-sm">Resume & Cover Letter</span>
             </div>
-            <div className={`flex items-center gap-2 ${step >= 3 ? 'text-blue-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 ${step >= 3 ? 'text-orange-600' : 'text-slate-400'}`}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                step >= 3 ? 'bg-blue-600 text-white' : 'bg-slate-200'
+                step >= 3 ? 'bg-orange-600 text-white' : 'bg-slate-200'
               }`}>
                 3
               </div>
@@ -178,12 +179,12 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
           </div>
 
           {/* Job Summary */}
-          <div className="bg-slate-50 rounded-lg p-4">
-            <h3 className="font-medium text-slate-900 mb-2">{job.title}</h3>
-            <p className="text-sm text-slate-600 mb-3">{job.description}</p>
+          <div className="bg-orange-50 rounded-lg p-4">
+            <h3 className="font-medium text-amber-900 mb-2">{job.title}</h3>
+            <p className="text-sm text-amber-700 mb-3">{job.description}</p>
             <div className="flex flex-wrap gap-1">
               {job.skills.map((skill) => (
-                <Badge key={skill} variant="secondary" className="text-xs">
+                <Badge key={skill} variant="secondary" className="text-xs bg-orange-100 text-orange-700">
                   {skill}
                 </Badge>
               ))}
@@ -230,12 +231,11 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
             </div>
           )}
 
-          {/* Step 2: Resume & Cover Letter */}
           {step === 2 && (
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-medium mb-4">Upload Resume</h3>
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                <div className="border-2 border-dashed border-amber-300 rounded-lg p-6 text-center hover:border-orange-400 transition-colors">
                   {resumeFile ? (
                     <div className="flex items-center justify-center gap-2 text-green-600">
                       <FileText className="h-5 w-5" />
@@ -243,12 +243,12 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
                     </div>
                   ) : (
                     <>
-                      <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                      <p className="text-slate-600 mb-2">Drag and drop your resume or</p>
+                      <Upload className="h-8 w-8 text-amber-400 mx-auto mb-2" />
+                      <p className="text-amber-600 mb-2">Drag and drop your resume or</p>
                     </>
                   )}
                   <label className="cursor-pointer">
-                    <Button variant="outline" size="sm" asChild>
+                    <Button variant="outline" size="sm" asChild className="border-orange-300 text-orange-700 hover:bg-orange-50">
                       <span>Choose File</span>
                     </Button>
                     <input
@@ -258,7 +258,7 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
                       className="hidden"
                     />
                   </label>
-                  <p className="text-xs text-slate-500 mt-2">PDF files only, max 5MB</p>
+                  <p className="text-xs text-amber-500 mt-2">PDF files only, max 5MB</p>
                 </div>
               </div>
 
@@ -269,7 +269,7 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
                     value={coverLetter}
                     onChange={(e) => setCoverLetter(e.target.value)}
                     placeholder="Tell us why you're perfect for this role... or use voice input!"
-                    className="min-h-[120px] pr-12"
+                    className="min-h-[120px] pr-12 border-amber-300 focus:border-orange-500"
                   />
                   <Button
                     type="button"
@@ -277,47 +277,46 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
                     size="sm"
                     onClick={handleVoiceInput}
                     className={`absolute top-2 right-2 p-2 ${
-                      isRecording ? 'bg-red-100 text-red-600 animate-pulse' : 'hover:bg-slate-100'
+                      isRecording ? 'bg-red-100 text-red-600 animate-pulse' : 'hover:bg-orange-100'
                     }`}
                   >
                     {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-amber-500 mt-1">
                   {isRecording ? 'Listening... Speak now!' : 'Click the microphone to use voice input'}
                 </p>
               </div>
             </div>
           )}
 
-          {/* Step 3: Review */}
           {step === 3 && (
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Review Your Application</h3>
               
-              <div className="bg-slate-50 rounded-lg p-4 space-y-3">
+              <div className="bg-orange-50 rounded-lg p-4 space-y-3">
                 <div>
-                  <span className="text-sm font-medium text-slate-700">Name: </span>
-                  <span className="text-sm text-slate-900">{personalInfo.name}</span>
+                  <span className="text-sm font-medium text-amber-700">Name: </span>
+                  <span className="text-sm text-amber-900">{personalInfo.name}</span>
                 </div>
                 <div>
-                  <span className="text-sm font-medium text-slate-700">Email: </span>
-                  <span className="text-sm text-slate-900">{personalInfo.email}</span>
+                  <span className="text-sm font-medium text-amber-700">Email: </span>
+                  <span className="text-sm text-amber-900">{personalInfo.email}</span>
                 </div>
                 {personalInfo.phone && (
                   <div>
-                    <span className="text-sm font-medium text-slate-700">Phone: </span>
-                    <span className="text-sm text-slate-900">{personalInfo.phone}</span>
+                    <span className="text-sm font-medium text-amber-700">Phone: </span>
+                    <span className="text-sm text-amber-900">{personalInfo.phone}</span>
                   </div>
                 )}
                 <div>
-                  <span className="text-sm font-medium text-slate-700">Resume: </span>
-                  <span className="text-sm text-slate-900">{resumeFile?.name || 'Not uploaded'}</span>
+                  <span className="text-sm font-medium text-amber-700">Resume: </span>
+                  <span className="text-sm text-amber-900">{resumeFile?.name || 'Not uploaded'}</span>
                 </div>
                 {coverLetter && (
                   <div>
-                    <span className="text-sm font-medium text-slate-700">Cover Letter: </span>
-                    <p className="text-sm text-slate-900 mt-1">{coverLetter}</p>
+                    <span className="text-sm font-medium text-amber-700">Cover Letter: </span>
+                    <p className="text-sm text-amber-900 mt-1">{coverLetter}</p>
                   </div>
                 )}
               </div>
@@ -328,20 +327,21 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
           <div className="flex justify-between pt-4">
             <div>
               {step > 1 && (
-                <Button variant="outline" onClick={() => setStep(step - 1)}>
+                <Button variant="outline" onClick={() => setStep(step - 1)} className="border-orange-300 text-orange-700 hover:bg-orange-50">
                   Previous
                 </Button>
               )}
             </div>
             
             <div className="flex gap-2">
-              <Button variant="outline" onClick={onClose}>
+              <Button variant="outline" onClick={onClose} className="border-amber-300 text-amber-700 hover:bg-amber-50">
                 Cancel
               </Button>
               {step < 3 ? (
                 <Button 
                   onClick={() => setStep(step + 1)}
                   disabled={step === 1 && (!personalInfo.name || !personalInfo.email)}
+                  className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700"
                 >
                   Next
                 </Button>
@@ -349,7 +349,7 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({ job, isOpen, onClose }) 
                 <Button 
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700"
                 >
                   <Send className="h-4 w-4 mr-2" />
                   {isSubmitting ? 'Submitting...' : 'Submit Application'}

@@ -4,22 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { MapPin, Clock, Building, Bookmark, BookmarkCheck, Zap } from 'lucide-react';
-
-interface Job {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  salary: string;
-  type: string;
-  posted: string;
-  description: string;
-  skills: string[];
-  logo: string;
-  isRemote: boolean;
-  isUrgent: boolean;
-  experienceLevel: string;
-}
+import { Job } from '@/lib/supabase';
 
 interface JobCardProps {
   job: Job;
@@ -29,6 +14,19 @@ interface JobCardProps {
 }
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onApply, onSave, isSaved }) => {
+  // Format the date to show "X days ago"
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    return `${Math.floor(diffDays / 30)} months ago`;
+  };
+
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-orange-200 bg-white/80 backdrop-blur-sm">
       <CardHeader className="space-y-3">
@@ -63,19 +61,19 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onApply, onSave, isSaved 
         </div>
         
         <div className="flex flex-wrap gap-2">
-          {job.isUrgent && (
+          {job.is_urgent && (
             <Badge variant="destructive" className="text-xs flex items-center gap-1 bg-orange-100 text-orange-700 border-orange-300">
               <Zap className="h-3 w-3" />
               Urgent Hiring
             </Badge>
           )}
-          {job.isRemote && (
+          {job.is_remote && (
             <Badge variant="secondary" className="text-xs bg-yellow-100 text-amber-700">
               Remote
             </Badge>
           )}
           <Badge variant="outline" className="text-xs border-amber-300 text-amber-700">
-            {job.experienceLevel}
+            {job.experience_level}
           </Badge>
         </div>
       </CardHeader>
@@ -89,7 +87,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onApply, onSave, isSaved 
           
           <div className="flex items-center gap-2 text-sm text-amber-600">
             <Clock className="h-4 w-4" />
-            Posted {job.posted}
+            Posted {formatDate(job.created_at)}
           </div>
         </div>
         
